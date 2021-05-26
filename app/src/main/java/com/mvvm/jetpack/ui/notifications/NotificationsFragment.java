@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.mvvm.jetpack.R;
 import com.mvvm.jetpack.databinding.FragmentNotificationsBinding;
+import com.mvvm.libnavannotation.FragmentDestination;
 
+@FragmentDestination(pageUrl = "main/tabs/notifications", asStarter = false)
 public class NotificationsFragment extends Fragment {
 
     private NotificationsViewModel notificationsViewModel;

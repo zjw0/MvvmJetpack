@@ -1,2 +1,4 @@
 rootProject.name = "MvvmJetpack"
 include ':app'
+include ':libnavcompiler'
+include ':libnavannotation'

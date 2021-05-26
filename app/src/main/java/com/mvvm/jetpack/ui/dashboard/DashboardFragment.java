@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.mvvm.jetpack.R;
 import com.mvvm.jetpack.databinding.FragmentDashboardBinding;
+import com.mvvm.libnavannotation.FragmentDestination;
 
+@FragmentDestination(pageUrl = "main/tabs/dashboard", asStarter = false)
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
