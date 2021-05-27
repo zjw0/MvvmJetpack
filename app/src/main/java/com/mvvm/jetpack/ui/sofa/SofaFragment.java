@@ -1,4 +1,4 @@
-package com.mvvm.jetpack.ui.dashboard;
+package com.mvvm.jetpack.ui.sofa;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,26 +12,25 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.mvvm.jetpack.R;
-import com.mvvm.jetpack.databinding.FragmentDashboardBinding;
+import com.mvvm.jetpack.databinding.FragmentHomeBinding;
 import com.mvvm.libnavannotation.FragmentDestination;
 
-@FragmentDestination(pageUrl = "main/tabs/dashboard", asStarter = false)
-public class DashboardFragment extends Fragment {
+@FragmentDestination(pageUrl = "main/tabs/sofa", asStarter = true)
+public class SofaFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
-    private FragmentDashboardBinding binding;
+    private SofaModel sofaModel;
+    private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
+        sofaModel =
+                new ViewModelProvider(this).get(SofaModel.class);
 
-        binding = FragmentDashboardBinding.inflate(inflater, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textDashboard;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        final TextView textView = binding.textHome;
+        sofaModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
