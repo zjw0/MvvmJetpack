@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mvvm.jetpack.databinding.FragmentHomeBinding;
 import com.mvvm.libnavannotation.FragmentDestination;
 
-@FragmentDestination(pageUrl = "main/tabs/sofa", asStarter = true)
+@FragmentDestination(pageUrl = "main/tabs/sofa", asStarter = false)
 public class SofaFragment extends Fragment {
 
     private SofaModel sofaModel;

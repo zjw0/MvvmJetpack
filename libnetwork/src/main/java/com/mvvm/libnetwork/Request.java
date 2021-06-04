@@ -1,10 +1,12 @@
 package com.mvvm.libnetwork;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
+import androidx.arch.core.executor.ArchTaskExecutor;
 
 import com.mvvm.libnetwork.cache.CacheManager;
 
@@ -12,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -41,6 +45,7 @@ public abstract class Request<T,R> {
     private int mCacheStrategy = NET_ONLY;
 
     @IntDef({CACHE_ONLY, CACHE_FIRST, NET_CACHE, NET_ONLY})
+    @Retention(RetentionPolicy.SOURCE)
     public @interface CacheStrategy{
 
     }
@@ -139,25 +144,39 @@ public abstract class Request<T,R> {
         return null;
     }
 
+    @SuppressLint("RestrictedApi")
     public void execute(final JsonCallback<T> callback){
-        getCall().enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                ApiResponse<T> response = new ApiResponse<>();
-                response.message = e.getMessage();
-                callback.onError(response);
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                ApiResponse<T> apiResponse = parseResponse(response,callback);
-                if(apiResponse.success){
-                    callback.onError(apiResponse);
-                }else {
-                    callback.onSuccess(apiResponse);
+        if (mCacheStrategy != NET_ONLY) {
+            ArchTaskExecutor.getIOThreadExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    ApiResponse<T> response = readCache();
+                    if (callback != null && response.body != null) {
+                        callback.onCacheSuccess(response);
+                    }
                 }
-            }
-        });
+            });
+        }
+        if (mCacheStrategy != CACHE_ONLY) {
+            getCall().enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    ApiResponse<T> response = new ApiResponse<>();
+                    response.message = e.getMessage();
+                    callback.onError(response);
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    ApiResponse<T> apiResponse = parseResponse(response,callback);
+                    if(apiResponse.success){
+                        callback.onError(apiResponse);
+                    }else {
+                        callback.onSuccess(apiResponse);
+                    }
+                }
+            });
+        }
     }
 
     private ApiResponse<T> readCache() {

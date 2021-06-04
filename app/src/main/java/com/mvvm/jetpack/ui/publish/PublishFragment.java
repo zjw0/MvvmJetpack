@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mvvm.jetpack.databinding.FragmentHomeBinding;
 import com.mvvm.libnavannotation.FragmentDestination;
 
-@FragmentDestination(pageUrl = "main/tabs/publish", asStarter = true)
+@FragmentDestination(pageUrl = "main/tabs/publish", asStarter = false)
 public class PublishFragment extends Fragment {
 
     private PublishViewModel publishViewModel;
