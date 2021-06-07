@@ -81,8 +81,12 @@ public class HomeViewModel extends AbsViewModel<Feed> {
         }
         //feeds/queryHotFeedsList
         Request request = ApiService.get("/feeds/queryHotFeedsList")
+//                .addParam("feedType", null)
+//                .addParam("userId", 0)
+//                .addParam("feedId", key)
+//                .addParam("pageCount", 10)
                 .addParam("feedType", mFeedType)
-//                .addParam("userId", UserManager.get().getUserId())
+                .addParam("userId", UserManager.get().getUserId())
                 .addParam("feedId", key)
                 .addParam("pageCount", count)
                 .responseType(new TypeReference<ArrayList<Feed>>() {
@@ -111,7 +115,8 @@ public class HomeViewModel extends AbsViewModel<Feed> {
 
         try {
             Request netRequest = witchCache ? request.clone() : request;
-            netRequest.cacheStrategy(key == 0 ? Request.NET_CACHE : Request.NET_ONLY);
+//            netRequest.cacheStrategy(key == 0 ? Request.NET_CACHE : Request.NET_ONLY);
+            netRequest.cacheStrategy(key == 0 ? Request.NET_ONLY : Request.NET_ONLY);
             ApiResponse<List<Feed>> response = netRequest.execute();
             List<Feed> data = response.body == null ? Collections.emptyList() : response.body;
 
@@ -130,7 +135,6 @@ public class HomeViewModel extends AbsViewModel<Feed> {
 
     }
 
-    @SuppressLint("RestrictedApi")
     public void loadAfter(int id, ItemKeyedDataSource.LoadCallback<Feed> callback) {
         if (loadAfter.get()) {
             callback.onResult(Collections.emptyList());

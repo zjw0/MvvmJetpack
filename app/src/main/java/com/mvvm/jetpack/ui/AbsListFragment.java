@@ -76,10 +76,10 @@ public abstract class AbsListFragment<T, M extends AbsViewModel<T>> extends Frag
             mViewModel = (M) ViewModelProviders.of(this).get(modelClaz);
 
             //触发页面初始化数据加载的逻辑
-            mViewModel.getPageData().observe(getViewLifecycleOwner(), pagedList -> submitList(pagedList));
+            mViewModel.getPageData().observe(this, pagedList -> submitList(pagedList));
 
             //监听分页时有无更多数据,以决定是否关闭上拉加载的动画
-            mViewModel.getBoundaryPageData().observe(getViewLifecycleOwner(), hasData -> finishRefresh(hasData));
+            mViewModel.getBoundaryPageData().observe(this, hasData -> finishRefresh(hasData));
         }
     }
 

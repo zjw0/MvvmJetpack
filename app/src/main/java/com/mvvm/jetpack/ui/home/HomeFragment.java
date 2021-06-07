@@ -32,7 +32,6 @@ import java.util.List;
 
 @FragmentDestination(pageUrl = "main/tabs/home", asStarter = true)
 public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
-
     private PageListPlayDetector playDetector;
     private String feedType;
     private boolean shouldPause = true;
@@ -47,7 +46,7 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        mViewModel.getCacheLiveData().observe(getViewLifecycleOwner(), new Observer<PagedList<Feed>>() {
+        mViewModel.getCacheLiveData().observe(this, new Observer<PagedList<Feed>>() {
             @Override
             public void onChanged(PagedList<Feed> feeds) {
                 submitList(feeds);
@@ -56,6 +55,7 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
         playDetector = new PageListPlayDetector(this, mRecyclerView);
         mViewModel.setFeedType(feedType);
     }
+
     @Override
     public PagedListAdapter getAdapter() {
         feedType = getArguments() == null ? "all" : getArguments().getString("feedType");
@@ -92,13 +92,7 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    @Override
-    public void onLoadMore(@NonNull @NotNull RefreshLayout refreshLayout) {
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
         final PagedList<Feed> currentList = adapter.getCurrentList();
         if (currentList == null || currentList.size() <= 0) {
             finishRefresh(false);
@@ -127,7 +121,7 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
     }
 
     @Override
-    public void onRefresh(@NonNull @NotNull RefreshLayout refreshLayout) {
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         //invalidate 之后Paging会重新创建一个DataSource 重新调用它的loadInitial方法加载初始化数据
         //详情见：LivePagedListBuilder#compute方法
         mViewModel.getDataSource().invalidate();
@@ -181,4 +175,5 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
         PageListPlayManager.release(feedType);
         super.onDestroy();
     }
+
 }

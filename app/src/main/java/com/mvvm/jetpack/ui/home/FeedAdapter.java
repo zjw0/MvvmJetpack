@@ -1,6 +1,5 @@
 package com.mvvm.jetpack.ui.home;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,15 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mvvm.jetpack.BR;
 import com.mvvm.jetpack.R;
+import com.mvvm.jetpack.databinding.LayoutFeedTypeImageBinding;
 import com.mvvm.jetpack.databinding.LayoutFeedTypeVideoBinding;
 import com.mvvm.jetpack.model.Feed;
+import com.mvvm.jetpack.ui.InteractionPresenter;
 import com.mvvm.jetpack.view.ListPlayerView;
 import com.mvvm.libcommon.extention.AbsPagedListAdapter;
-
+import com.mvvm.libcommon.extention.LiveDataBus;
 
 public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolder> {
     private final LayoutInflater inflater;
@@ -34,7 +36,6 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
                 return oldItem.id == newItem.id;
             }
 
-            @SuppressLint("DiffUtilEquals")
             @Override
             public boolean areContentsTheSame(@NonNull Feed oldItem, @NonNull Feed newItem) {
                 return oldItem.equals(newItem);
@@ -70,20 +71,20 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
 
         holder.bindData(feed);
 
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                FeedDetailActivity.startFeedDetailActivity(mContext, feed, mCategory);
 //                onStartFeedDetailActivity(feed);
-//                if (mFeedObserver == null) {
-//                    mFeedObserver = new FeedObserver();
-//                    LiveDataBus.get()
-//                            .with(InteractionPresenter.DATA_FROM_INTERACTION)
-//                            .observe((LifecycleOwner) mContext, mFeedObserver);
-//                }
-//                mFeedObserver.setFeed(feed);
-//            }
-//        });
+                if (mFeedObserver == null) {
+                    mFeedObserver = new FeedObserver();
+                    LiveDataBus.get()
+                            .with(InteractionPresenter.DATA_FROM_INTERACTION)
+                            .observe((LifecycleOwner) mContext, mFeedObserver);
+                }
+                mFeedObserver.setFeed(feed);
+            }
+        });
     }
 
     public void onStartFeedDetailActivity(Feed feed) {
@@ -102,7 +103,7 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
                 return;
             mFeed.author = newOne.author;
             mFeed.ugc = newOne.ugc;
-//            mFeed.notifyChange();
+            mFeed.notifyChange();
         }
 
         public void setFeed(Feed feed) {
@@ -127,21 +128,21 @@ public class FeedAdapter extends AbsPagedListAdapter<Feed, FeedAdapter.ViewHolde
             //而dataBinding的执行默认是延迟一帧的。
             //当列表上下滑动的时候 ，会明显的看到宽高尺寸不对称的问题
 
-//            mBinding.setVariable(com.mooc.ppjoke.BR.feed, item);
-//            mBinding.setVariable(BR.lifeCycleOwner, mContext);
-//            if (mBinding instanceof LayoutFeedTypeImageBinding) {
-//                LayoutFeedTypeImageBinding imageBinding = (LayoutFeedTypeImageBinding) mBinding;
-//                feedImage = imageBinding.feedImage;
-//                imageBinding.feedImage.bindData(item.width, item.height, 16, item.cover);
-//                //imageBinding.setFeed(item);
-//                //imageBinding.interactionBinding.setLifeCycleOwner((LifecycleOwner) mContext);
-//            } else if (mBinding instanceof LayoutFeedTypeVideoBinding) {
-//                LayoutFeedTypeVideoBinding videoBinding = (LayoutFeedTypeVideoBinding) mBinding;
-//                videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
-//                listPlayerView = videoBinding.listPlayerView;
-//                //videoBinding.setFeed(item);
-//                //videoBinding.interactionBinding.setLifeCycleOwner((LifecycleOwner) mContext);
-//            }
+            mBinding.setVariable(com.mvvm.jetpack.BR.feed, item);
+            mBinding.setVariable(BR.lifeCycleOwner, mContext);
+            if (mBinding instanceof LayoutFeedTypeImageBinding) {
+                LayoutFeedTypeImageBinding imageBinding = (LayoutFeedTypeImageBinding) mBinding;
+                feedImage = imageBinding.feedImage;
+                imageBinding.feedImage.bindData(item.width, item.height, 16, item.cover);
+                //imageBinding.setFeed(item);
+                //imageBinding.interactionBinding.setLifeCycleOwner((LifecycleOwner) mContext);
+            } else if (mBinding instanceof LayoutFeedTypeVideoBinding) {
+                LayoutFeedTypeVideoBinding videoBinding = (LayoutFeedTypeVideoBinding) mBinding;
+                videoBinding.listPlayerView.bindData(mCategory, item.width, item.height, item.cover, item.url);
+                listPlayerView = videoBinding.listPlayerView;
+                //videoBinding.setFeed(item);
+                //videoBinding.interactionBinding.setLifeCycleOwner((LifecycleOwner) mContext);
+            }
         }
 
         public boolean isVideoItem() {
