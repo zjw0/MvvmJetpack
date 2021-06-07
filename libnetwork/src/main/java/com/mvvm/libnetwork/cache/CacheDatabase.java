@@ -1,10 +1,11 @@
 package com.mvvm.libnetwork.cache;
 
+import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.mvvm.libcommon.AppGlobals;
-
+@Database(entities = {Cache.class}, version = 1)
 public abstract class CacheDatabase extends RoomDatabase {
 
     private static final CacheDatabase database;
@@ -13,7 +14,7 @@ public abstract class CacheDatabase extends RoomDatabase {
             //创建一个内存数据库
             //但是这种数据库的数据只存在于内存中，也就是进程被杀之后，数据随之丢失
             //Room.inMemoryDatabaseBuilder()
-            database = Room.databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "ppjoke_cache")
+            database = Room.databaseBuilder(AppGlobals.getApplication(), CacheDatabase.class, "jetpack_cache")
                     //是否允许在主线程进行查询
                     .allowMainThreadQueries()
                     //数据库创建和打开后的回调

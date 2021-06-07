@@ -22,6 +22,7 @@ import com.mvvm.jetpack.exoplayer.PageListPlayDetector;
 import com.mvvm.jetpack.exoplayer.PageListPlayManager;
 import com.mvvm.jetpack.model.Feed;
 import com.mvvm.jetpack.ui.AbsListFragment;
+import com.mvvm.jetpack.ui.MutablePageKeyedDataSource;
 import com.mvvm.libnavannotation.FragmentDestination;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
@@ -108,19 +109,19 @@ public class HomeFragment extends AbsListFragment<Feed, HomeViewModel> {
             @Override
             public void onResult(@NonNull List<Feed> data) {
                 PagedList.Config config = currentList.getConfig();
-//                if (data != null && data.size() > 0) {
-//                    //这里 咱们手动接管 分页数据加载的时候 使用MutableItemKeyedDataSource也是可以的。
-//                    //由于当且仅当 paging不再帮我们分页的时候，我们才会接管。所以 就不需要ViewModel中创建的DataSource继续工作了，所以使用
-//                    //MutablePageKeyedDataSource也是可以的
-//                    MutablePageKeyedDataSource dataSource = new MutablePageKeyedDataSource();
-//
-//                    //这里要把列表上已经显示的先添加到dataSource.data中
-//                    //而后把本次分页回来的数据再添加到dataSource.data中
-//                    dataSource.data.addAll(currentList);
-//                    dataSource.data.addAll(data);
-//                    PagedList pagedList = dataSource.buildNewPagedList(config);
-//                    submitList(pagedList);
-//                }
+                if (data != null && data.size() > 0) {
+                    //这里 咱们手动接管 分页数据加载的时候 使用MutableItemKeyedDataSource也是可以的。
+                    //由于当且仅当 paging不再帮我们分页的时候，我们才会接管。所以 就不需要ViewModel中创建的DataSource继续工作了，所以使用
+                    //MutablePageKeyedDataSource也是可以的
+                    MutablePageKeyedDataSource dataSource = new MutablePageKeyedDataSource();
+
+                    //这里要把列表上已经显示的先添加到dataSource.data中
+                    //而后把本次分页回来的数据再添加到dataSource.data中
+                    dataSource.data.addAll(currentList);
+                    dataSource.data.addAll(data);
+                    PagedList pagedList = dataSource.buildNewPagedList(config);
+                    submitList(pagedList);
+                }
             }
         });
     }

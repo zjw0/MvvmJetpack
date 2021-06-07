@@ -13,6 +13,12 @@ import androidx.paging.PagedList;
 import com.alibaba.fastjson.TypeReference;
 import com.mvvm.jetpack.model.Feed;
 import com.mvvm.jetpack.ui.AbsViewModel;
+import com.mvvm.jetpack.ui.MutablePageKeyedDataSource;
+import com.mvvm.jetpack.ui.login.UserManager;
+import com.mvvm.libnetwork.ApiResponse;
+import com.mvvm.libnetwork.ApiService;
+import com.mvvm.libnetwork.JsonCallback;
+import com.mvvm.libnetwork.Request;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,51 +80,51 @@ public class HomeViewModel extends AbsViewModel<Feed> {
             loadAfter.set(true);
         }
         //feeds/queryHotFeedsList
-//        Request request = ApiService.get("/feeds/queryHotFeedsList")
-//                .addParam("feedType", mFeedType)
+        Request request = ApiService.get("/feeds/queryHotFeedsList")
+                .addParam("feedType", mFeedType)
 //                .addParam("userId", UserManager.get().getUserId())
-//                .addParam("feedId", key)
-//                .addParam("pageCount", count)
-//                .responseType(new TypeReference<ArrayList<Feed>>() {
-//                }.getType());
-//
-//        if (witchCache) {
-//            request.cacheStrategy(Request.CACHE_ONLY);
-//            request.execute(new JsonCallback<List<Feed>>() {
-//                @Override
-//                public void onCacheSuccess(ApiResponse<List<Feed>> response) {
-//                    Log.e("loadData", "onCacheSuccess: ");
-//                    MutablePageKeyedDataSource dataSource = new MutablePageKeyedDataSource<Feed>();
-//                    dataSource.data.addAll(response.body);
-//
-//                    PagedList pagedList = dataSource.buildNewPagedList(config);
-//                    cacheLiveData.postValue(pagedList);
-//
-//                    //下面的不可取，否则会报
-//                    // java.lang.IllegalStateException: callback.onResult already called, cannot call again.
-//                    //if (response.body != null) {
-//                    //  callback.onResult(response.body);
-//                    // }
-//                }
-//            });
-//        }
-//
-//        try {
-//            Request netRequest = witchCache ? request.clone() : request;
-//            netRequest.cacheStrategy(key == 0 ? Request.NET_CACHE : Request.NET_ONLY);
-//            ApiResponse<List<Feed>> response = netRequest.execute();
-//            List<Feed> data = response.body == null ? Collections.emptyList() : response.body;
-//
-//            callback.onResult(data);
-//
-//            if (key > 0) {
-//                //通过BoundaryPageData发送数据 告诉UI层 是否应该主动关闭上拉加载分页的动画
-//                ((MutableLiveData) getBoundaryPageData()).postValue(data.size() > 0);
-//                loadAfter.set(false);
-//            }
-//        } catch (CloneNotSupportedException e) {
-//            e.printStackTrace();
-//        }
+                .addParam("feedId", key)
+                .addParam("pageCount", count)
+                .responseType(new TypeReference<ArrayList<Feed>>() {
+                }.getType());
+
+        if (witchCache) {
+            request.cacheStrategy(Request.CACHE_ONLY);
+            request.execute(new JsonCallback<List<Feed>>() {
+                @Override
+                public void onCacheSuccess(ApiResponse<List<Feed>> response) {
+                    Log.e("loadData", "onCacheSuccess: ");
+                    MutablePageKeyedDataSource dataSource = new MutablePageKeyedDataSource<Feed>();
+                    dataSource.data.addAll(response.body);
+
+                    PagedList pagedList = dataSource.buildNewPagedList(config);
+                    cacheLiveData.postValue(pagedList);
+
+                    //下面的不可取，否则会报
+                    // java.lang.IllegalStateException: callback.onResult already called, cannot call again.
+                    //if (response.body != null) {
+                    //  callback.onResult(response.body);
+                    // }
+                }
+            });
+        }
+
+        try {
+            Request netRequest = witchCache ? request.clone() : request;
+            netRequest.cacheStrategy(key == 0 ? Request.NET_CACHE : Request.NET_ONLY);
+            ApiResponse<List<Feed>> response = netRequest.execute();
+            List<Feed> data = response.body == null ? Collections.emptyList() : response.body;
+
+            callback.onResult(data);
+
+            if (key > 0) {
+                //通过BoundaryPageData发送数据 告诉UI层 是否应该主动关闭上拉加载分页的动画
+                ((MutableLiveData) getBoundaryPageData()).postValue(data.size() > 0);
+                loadAfter.set(false);
+            }
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
 
         Log.e("loadData", "loadData: key:" + key);
 

@@ -10,6 +10,7 @@ import androidx.navigation.NavigatorProvider;
 import androidx.navigation.fragment.FragmentNavigator;
 
 import com.mvvm.jetpack.model.Destination;
+import com.mvvm.libcommon.AppGlobals;
 
 import java.util.HashMap;
 

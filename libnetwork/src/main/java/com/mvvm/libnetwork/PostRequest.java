@@ -11,12 +11,12 @@ public class PostRequest<T> extends Request<T, PostRequest> {
 
     @Override
     protected okhttp3.Request generateRequest(okhttp3.Request.Builder builder) {
+        //post请求表单提交
         FormBody.Builder bodyBuilder = new FormBody.Builder();
-        for (Map.Entry<String, Object> enty : params.entrySet()) {
-            bodyBuilder.add(enty.getKey(), String.valueOf(enty.getValue()));
+        for (Map.Entry<String, Object> entry : params.entrySet()) {
+            bodyBuilder.add(entry.getKey(), String.valueOf(entry.getValue()));
         }
         okhttp3.Request request = builder.url(mUrl).post(bodyBuilder.build()).build();
         return request;
     }
-
 }

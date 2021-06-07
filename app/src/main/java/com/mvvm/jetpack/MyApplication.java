@@ -2,6 +2,8 @@ package com.mvvm.jetpack;
 
 import android.app.Application;
 
+import com.mvvm.libnetwork.ApiService;
+
 
 /**
  * 咱们的服务器已经部署到公网了.
@@ -15,6 +17,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        ApiService.init("http://123.56.232.18:8080/serverdemo", null);
+        ApiService.init("http://123.56.232.18:8080/serverdemo", null);
     }
 }

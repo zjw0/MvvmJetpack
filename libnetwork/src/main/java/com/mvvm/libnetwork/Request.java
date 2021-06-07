@@ -26,7 +26,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public abstract class Request<T,R> {
+public abstract class Request<T, R extends Request> implements Cloneable {
     protected String mUrl;
     protected HashMap<String, String> headers = new HashMap<>();
     protected HashMap<String, Object> params = new HashMap<>();
@@ -58,6 +58,7 @@ public abstract class Request<T,R> {
         headers.put(key,value);
         return (R) this;
     }
+
     public R addParam(String key, Object value) {
         if (value == null) {
             return (R) this;
@@ -145,7 +146,7 @@ public abstract class Request<T,R> {
     }
 
     @SuppressLint("RestrictedApi")
-    public void execute(final JsonCallback<T> callback){
+    public void execute(final JsonCallback callback) {
         if (mCacheStrategy != NET_ONLY) {
             ArchTaskExecutor.getIOThreadExecutor().execute(new Runnable() {
                 @Override
@@ -161,18 +162,18 @@ public abstract class Request<T,R> {
             getCall().enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    ApiResponse<T> response = new ApiResponse<>();
-                    response.message = e.getMessage();
-                    callback.onError(response);
+                    ApiResponse<T> result = new ApiResponse<>();
+                    result.message = e.getMessage();
+                    callback.onError(result);
                 }
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    ApiResponse<T> apiResponse = parseResponse(response,callback);
-                    if(apiResponse.success){
-                        callback.onError(apiResponse);
-                    }else {
-                        callback.onSuccess(apiResponse);
+                    ApiResponse<T> result = parseResponse(response, callback);
+                    if (!result.success) {
+                        callback.onError(result);
+                    } else {
+                        callback.onSuccess(result);
                     }
                 }
             });
