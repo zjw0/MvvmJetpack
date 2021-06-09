@@ -1,7 +1,6 @@
 package com.mvvm.jetpack.ui.login;
 
 import android.content.Context;
-import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.arch.core.executor.ArchTaskExecutor;
@@ -9,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.mvvm.jetpack.model.User;
-import com.mvvm.libcommon.AppGlobals;
+import com.mvvm.libcommon.global.AppGlobals;
 import com.mvvm.libnetwork.ApiResponse;
 import com.mvvm.libnetwork.ApiService;
 import com.mvvm.libnetwork.JsonCallback;

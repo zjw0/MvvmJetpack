@@ -2,8 +2,6 @@ package com.mvvm.jetpack.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.text.TextUtils;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,7 +16,7 @@ import com.mvvm.jetpack.model.Comment;
 import com.mvvm.jetpack.model.Feed;
 import com.mvvm.jetpack.model.User;
 import com.mvvm.jetpack.ui.login.UserManager;
-import com.mvvm.libcommon.AppGlobals;
+import com.mvvm.libcommon.global.AppGlobals;
 import com.mvvm.libcommon.extention.LiveDataBus;
 import com.mvvm.libnetwork.ApiResponse;
 import com.mvvm.libnetwork.ApiService;

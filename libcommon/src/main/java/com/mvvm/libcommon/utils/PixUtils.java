@@ -2,7 +2,7 @@ package com.mvvm.libcommon.utils;
 
 import android.util.DisplayMetrics;
 
-import com.mvvm.libcommon.AppGlobals;
+import com.mvvm.libcommon.global.AppGlobals;
 
 public class PixUtils {
 

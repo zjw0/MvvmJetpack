@@ -1,4 +1,4 @@
-package com.mvvm.libcommon;
+package com.mvvm.libcommon.global;
 
 import android.app.Application;
 

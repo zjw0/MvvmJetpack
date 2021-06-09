@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.mvvm.jetpack.model.BottomBar;
 import com.mvvm.jetpack.model.Destination;
-import com.mvvm.libcommon.AppGlobals;
+import com.mvvm.libcommon.global.AppGlobals;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -81,10 +81,6 @@ public class HomeViewModel extends AbsViewModel<Feed> {
         }
         //feeds/queryHotFeedsList
         Request request = ApiService.get("/feeds/queryHotFeedsList")
-//                .addParam("feedType", null)
-//                .addParam("userId", 0)
-//                .addParam("feedId", key)
-//                .addParam("pageCount", 10)
                 .addParam("feedType", mFeedType)
                 .addParam("userId", UserManager.get().getUserId())
                 .addParam("feedId", key)
@@ -135,6 +131,7 @@ public class HomeViewModel extends AbsViewModel<Feed> {
 
     }
 
+    @SuppressLint("RestrictedApi")
     public void loadAfter(int id, ItemKeyedDataSource.LoadCallback<Feed> callback) {
         if (loadAfter.get()) {
             callback.onResult(Collections.emptyList());
