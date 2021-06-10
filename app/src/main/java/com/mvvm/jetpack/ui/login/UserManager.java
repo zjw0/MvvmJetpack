@@ -1,6 +1,8 @@
 package com.mvvm.jetpack.ui.login;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.arch.core.executor.ArchTaskExecutor;
@@ -41,9 +43,9 @@ public class UserManager {
     }
 
     public LiveData<User> login(Context context) {
-//        Intent intent = new Intent(context, LoginActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        context.startActivity(intent);
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
         return userLiveData;
     }
 
@@ -74,6 +76,7 @@ public class UserManager {
                         liveData.postValue(getUser());
                     }
 
+                    @SuppressLint("RestrictedApi")
                     @Override
                     public void onError(ApiResponse<User> response) {
                         ArchTaskExecutor.getMainThreadExecutor().execute(new Runnable() {

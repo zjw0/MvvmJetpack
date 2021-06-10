@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.mvvm.jetpack.databinding.FragmentHomeBinding;
 import com.mvvm.libnavannotation.FragmentDestination;
 
-@FragmentDestination(pageUrl = "main/tabs/my", asStarter = false)
+@FragmentDestination(pageUrl = "main/tabs/my", needLogin = true)
 public class MyFragment extends Fragment {
 
     private MyViewModel myViewModel;
